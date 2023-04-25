@@ -1,0 +1,49 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+const int MAX = 5001;
+using namespace std;
+
+int n, q;
+vector<pair<int,long long>> adj[MAX];
+int vis[MAX];
+
+void dfs(int node, int &res, long long m, long long k){
+    vis[node] = true;
+    for(auto u : adj[node]){
+        if(!vis[u.first]){
+            if(min(m,u.second) >= k)res++;
+            dfs(u.first,res,min(m,u.second),k);
+        }
+    }
+}
+
+void solve(int k, int node){
+    int res = 0;
+    long long m = 1e9+1;
+    fill(vis,vis+n,false);
+    dfs(node,res,m,k);
+    cout << res << endl;
+}
+
+int main(){
+    freopen("input.txt","r",stdin);
+    freopen("a.txt","w",stdout);
+    cin >> n >> q;
+    int a,b;
+    long long r;
+    for(int i= 0; i < n-1; i++){
+        cin >> a >> b>> r;
+        a--; b--;
+        adj[a].push_back(make_pair(b,r));
+        adj[b].push_back(make_pair(a,r));
+    }
+    int node;
+    long long k;
+    for(int i = 0; i < q; i++){
+        cin >> k >> node;
+        solve(k,node-1);
+    }
+
+
+}
